@@ -55,6 +55,7 @@ void Imprime_Todos_Gabaritos();
 gabarito *Carrega_Gabaritos();
 aluno *Carrega_Alunos();
 gabarito *Busca_Gab(int codigo);
+int Busca_TotalQuest(int codigo);
 void Size();
 void Update_Size();
 void Limpar_Memoria_Gab(gabarito *celula);

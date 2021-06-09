@@ -178,15 +178,16 @@ void Cadastrar_Aluno()
     // Os dados temporários (para serem salvos ou não) são armazenados em uma célula criada para este fim no início do programa
     // Esta célula é do tipo gabarito e é referenciada pelo ponteiro "ponteiro_gabarito"
 
-   int i, op, testID, chave_gabarito;
+   int i, op, testID, chave_gabarito, total_quest;
    gabarito *end_gabarito;
    aluno *end_aluno;
 
 
     do
     {
-        testID = 0;    // Variável para controlar a repetição da função
+        testID = chave_gabarito = total_quest = 0;    // Variável para controlar a repetição da função
         printf("\n\tDigite seu nome: "); scanf("%[^\n]%*c", ponteiro_aluno->nome);
+        
         printf("\n\tDigite sua matrícula (8 dígitos): "); scanf("%d", &ponteiro_aluno->matricula);
 
         while (ponteiro_aluno->matricula < 11111111 || ponteiro_aluno->matricula > 99999999)
@@ -208,17 +209,20 @@ void Cadastrar_Aluno()
             system("clear");
 
         }
-        end_gabarito = Busca_Gab(ponteiro_aluno->codGabarito);
-            if (end_gabarito == NULL)
-            printf("Chave de gabarito não cadastrada!\n");
-            else
-            {
-                system("clear");
-                printf("Gabarito encontrado:\n");
-                Imprime_Gabarito(end_gabarito);       // Função para imprimir o gabarito pelo endereço informado
-            }
 
-            ponteiro_aluno->totalQuestao = ponteiro_gabarito->totalQuestao;
+        chave_gabarito = ponteiro_aluno->codGabarito;
+
+        ponteiro_aluno->totalQuestao = Busca_TotalQuest(chave_gabarito);
+
+            while (ponteiro_aluno->totalQuestao == -1){
+                printf("Chave de gabarito não cadastrada!\nTente novamente: "); scanf("%d", &ponteiro_aluno->codGabarito);
+                chave_gabarito = ponteiro_aluno->codGabarito;
+                ponteiro_aluno->totalQuestao = Busca_TotalQuest(chave_gabarito);
+            }
+            
+        system("clear");
+        printf("Gabarito encontrado, chave %d\n", chave_gabarito);
+        printf("A prova possui %d questões, preencha abaixo em ordem:\n", ponteiro_aluno->totalQuestao);
 
         // Colhe as respostas das questões e verifica se as mesmas são válidas, comparando os dados "char" com seus respectivos
         // códigos da tabela ASC II ('A' = 65 e 'E' = 69)
@@ -377,6 +381,25 @@ gabarito *Busca_Gab(int codigo)
         }
     }
     return NULL;
+}
+
+int Busca_TotalQuest(int codigo)
+{
+    // Esta função percorre a lista de gabaritos procurando pelo código passado por parâmetro. Se encontra, retorna o endereço deste gabarito. Senão, retorna NULL
+
+    int i;
+    gabarito *celula = Lista_Gabaritos;   // Declara um ponteiro para armazenar endereços temporários do tipo gabarito e associa ao endereço inicial da lista de gabaritos
+
+    // Percorre a lista e compara o código informado aos códigos dos gabaritos
+
+    for (i = 0; i < SIZE_GAB; i++, celula = celula->prox)
+    {
+        if (codigo == celula->codGabarito)
+        {
+            return celula->totalQuestao;
+        }
+    }
+    return (-1);
 }
 
 
