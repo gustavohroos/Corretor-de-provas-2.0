@@ -8,7 +8,7 @@ int menu(void)
     //Esta função exibe o menu e retorna a opção escolhida pelo usuário
 
     int op;
-
+    system("clear");
     do
     {
     printf("\n\n ---------------Bem-vindo-----------------\n");
@@ -36,7 +36,7 @@ int menu(void)
 
     if( op == 0){
       int dec = 0;
-      printf("Deseja mesmo sair?\n 1.Sim 2.Não: ");
+      printf("Deseja mesmo sair?\n 1. Sim 2. Não: ");
       scanf("%d", &dec);
       if(dec == 2)
       op = 7;
@@ -470,7 +470,7 @@ void Exclui_Gab()
 {
     // Esta função percorre a lista de gabaritos procurando pelo código passado por parâmetro. Se encontra, retorna o endereço deste gabarito. Senão, retorna NULL
 
-    int i, codigo, auxiliar = 0, testId = 0;
+    int i, codigo, auxiliar = 0, testId = 1;
     gabarito *temp, *start, *celula;   // Declara um ponteiro para armazenar endereços temporários do tipo gabarito e associa ao endereço inicial da celulaa de gabaritos
     FILE *fp;
     system("clear");
@@ -570,7 +570,7 @@ void Exclui_Aluno()
 			exit(0);
 		}
 		celula = start;
-		for(i = 0; i < SIZE_GAB; i++, celula = celula->prox){
+		for(i = 0; i < SIZE_ALU; i++, celula = celula->prox){
 			fprintf(fp , "%s %d %d %d %s\n", celula->nome, celula->matricula, celula->codGabarito, celula->totalQuestao, celula->resposta);
 		}
 		if(auxiliar)
@@ -729,7 +729,7 @@ aluno *Carrega_Alunos()
     // Copia para a lista os tres dados (inteiro, inteiro e string de chars) de cada linha do arquivo, desconsiderando o '/n'
 
     for(i = 0; i < SIZE_ALU; i++, celula = celula->prox){
-		fscanf(fp,"%[^\n]%*c %d %d %[^\n]s", celula->nome, &celula->matricula, &celula->codGabarito, celula->resposta);
+		fscanf(fp,"%[^\n]%*c %d %d %d %[^\n]s", celula->nome, &celula->matricula, &celula->codGabarito, &celula->totalQuestao, celula->resposta);
 		celula->prox = (aluno *) malloc(sizeof(aluno));   // Aloca espaço para a próxima célula da lista
 		celula->prox->prox = NULL;    // Define o endereço da proxima celula da célula recém alocada como NULL, identificando-a como última da lista
 	}
