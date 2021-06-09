@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "func.h"
 
 
@@ -372,6 +369,116 @@ void Imprime_Todos_Gabaritos()
        }
        printf("\n");
     }
+}
+
+void Cadastrar_Aluno()
+{
+    // Esta função recolhe os dados de uma prova (chave, numero de questões, gabarito) e dá a opção de salvá-los ou não
+    // Os dados temporários (para serem salvos ou não) são armazenados em uma célula criada para este fim no início do programa
+    // Esta célula é do tipo gabarito e é referenciada pelo ponteiro "ponteiro_gabarito"
+
+   int i, op, testID;
+
+    do
+    {
+        testID = 0;    // Variável para controlar a repetição da função
+        printf("\n\tChave de acesso da prova (de 1111 a 9999): ");
+        scanf("%d", &ponteiro_gabarito->codGabarito);
+        system("clear");
+
+        // Verifica se a informação digitada é válida. Permite apenas números de 4 dígitos que não comecem com zeros
+
+        while (ponteiro_gabarito->codGabarito < 1111 || ponteiro_gabarito->codGabarito > 9999)
+        {
+            printf("\n\tChave de acesso deve estar entre 1111 e 9999.\n\tPor favor digite novamente: ");
+            scanf("%d", &ponteiro_gabarito->codGabarito);
+            system("clear");
+        }
+
+        printf("\n\tTotal de questões da prova (Entre %d e %d): ", RESPOSTAS_MIN, RESPOSTAS_MAX);
+        scanf("%d", &ponteiro_gabarito->totalQuestao);
+        system("clear");
+
+        // Verifica se a informação digitada é válida
+
+        while(ponteiro_gabarito->totalQuestao < RESPOSTAS_MIN || ponteiro_gabarito->totalQuestao > RESPOSTAS_MAX)
+        {
+            printf("\n\tTotal de questões da prova deve estar entre %d e %d.\n\tPor favor digite novamente: ", RESPOSTAS_MIN, RESPOSTAS_MAX);
+            scanf("%d", &ponteiro_gabarito->totalQuestao);
+            system("clear");
+        }
+
+        // Colhe as respostas das questões e verifica se as mesmas são válidas, comparando os dados "char" com seus respectivos
+        // códigos da tabela ASC II ('A' = 65 e 'E' = 69)
+
+        for(i = 0; i < ponteiro_gabarito->totalQuestao; i++)
+        {
+            do
+            {
+                printf("\nQuestão %d: ", i+1);
+                scanf("%s", &ponteiro_gabarito->resposta[i]);
+
+                if((ponteiro_gabarito->resposta[i] < 65 || ponteiro_gabarito->resposta[i] > 69) && ponteiro_gabarito->resposta[i] != 'X')
+                printf("\nInvalida\n");
+
+            }while((ponteiro_gabarito->resposta[i] < 65 || ponteiro_gabarito->resposta[i] > 69) && ponteiro_gabarito->resposta[i] != 'X');
+
+            printf("Resposta cadastrada.\n");  // Confirma que a resposta foi cadastrada.
+        }
+
+        system("clear");
+
+        // Exibe todas as informações inseridas para fins de revisão
+
+        printf("Revise as informações:\n");
+        Imprime_Gabarito(ponteiro_gabarito);
+
+        // Dá a opção de salvar ou não o gabarito e verifica se a opção é válida
+
+        do
+        {
+            printf("\nDeseja salvar este gabarito?\n1.Sim 2.Não\n\nSua escolha: ");
+            scanf("%d", &op);
+            if (op < 1 || op > 2)
+            {
+                system("clear");
+                printf("Opção inválida!\n");
+            }
+        }while(op < 1 || op > 2);
+
+        if(op == 1)
+        {
+            Salvar_Gabarito();
+            system("clear");
+            printf("Gabarito salvo com sucesso!\n");
+        }
+        else if(op == 2)
+        {
+            system("clear");
+            printf("Este gabarito não foi salvo...\n");
+        }
+
+        // Dá a opção de cadastrar ou não outro gabarito e verifica se a opção é válida
+
+        do
+        {
+            printf("\nDeseja cadastrar outro gabarito?\n1.Sim 2.Não\n\nSua escolha: ");
+            scanf("%d", &op);
+            if (op < 1 || op > 2)
+            {
+                system("clear");
+                printf("Opção inválida!\n");
+            }
+        } while (op < 1 || op > 2);
+
+        if (op == 1)
+        {
+            system("clear");
+            testID = 1;
+        }
+        }while(testID);   // Testa a variável de controle da repetição da função
+
+        system("clear");
 }
 
 

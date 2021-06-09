@@ -2,6 +2,8 @@
 #include<stdlib.h>
 #include <locale.h>
 #include "func.h"
+#include "func.c"
+
 
 
 
