@@ -1,3 +1,4 @@
+#define NOME_MAX 50
 #define RESPOSTAS_MAX 50
 #define RESPOSTAS_MIN 1
 
@@ -13,8 +14,8 @@ struct prova {
 typedef struct prova gabarito;
 
 struct alu {
-  int matricula, codGabarito;
-  char resposta[RESPOSTAS_MAX];
+  int matricula, codGabarito, totalQuestao;
+  char nome[NOME_MAX], resposta[RESPOSTAS_MAX];
   struct alu *prox;
 };
 
@@ -43,12 +44,16 @@ aluno *Lista_Alunos;
 
 
 int menu(void);
-void Cadastrar_Gabarito ();
+void Cadastrar_Gabarito();
+void Cadastrar_Aluno();
 void Salvar_Gabarito();
+void Salvar_Aluno();
 void Pesquisar_Gabarito();
 void Imprime_Gabarito(gabarito *end_gabarito);
+void Imprime_Aluno(aluno *end_aluno);
 void Imprime_Todos_Gabaritos();
 gabarito *Carrega_Gabaritos();
+aluno *Carrega_Alunos();
 gabarito *Busca_Gab(int codigo);
 void Size();
 void Update_Size();

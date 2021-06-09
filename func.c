@@ -172,6 +172,127 @@ void Cadastrar_Gabarito()
         system("clear");
 }
 
+void Cadastrar_Aluno()
+{
+    // Esta função recolhe os dados de uma prova (chave, numero de questões, gabarito) e dá a opção de salvá-los ou não
+    // Os dados temporários (para serem salvos ou não) são armazenados em uma célula criada para este fim no início do programa
+    // Esta célula é do tipo gabarito e é referenciada pelo ponteiro "ponteiro_gabarito"
+
+   int i, op, testID, chave_gabarito;
+   gabarito *end_gabarito;
+   aluno *end_aluno;
+
+
+    do
+    {
+        testID = 0;    // Variável para controlar a repetição da função
+        printf("\n\tDigite seu nome: "); scanf("%[^\n]%*c", ponteiro_aluno->nome);
+        printf("\n\tDigite sua matrícula (8 dígitos): "); scanf("%d", &ponteiro_aluno->matricula);
+
+        while (ponteiro_aluno->matricula < 11111111 || ponteiro_aluno->matricula > 99999999)
+        {
+            printf("\n\tNúmero de matrícula deve estar entre 11111111 e 99999999.\n\tPor favor digite novamente: ");
+            scanf("%d", &ponteiro_aluno->matricula);
+            system("clear");
+        }
+
+        printf("\n\tChave de acesso da prova (de 1111 a 9999): "); scanf("%d", &ponteiro_aluno->codGabarito);
+        system("clear");
+
+        // Verifica se a informação digitada é válida. Permite apenas números de 4 dígitos que não comecem com zeros
+
+        while (ponteiro_aluno->codGabarito < 1111 || ponteiro_aluno->codGabarito > 9999)
+        {
+            printf("\n\tChave de acesso deve estar entre 1111 e 9999.\n\tPor favor digite novamente: ");
+            scanf("%d", &ponteiro_aluno->codGabarito);
+            system("clear");
+
+        }
+        end_gabarito = Busca_Gab(ponteiro_aluno->codGabarito);
+            if (end_gabarito == NULL)
+            printf("Chave de gabarito não cadastrada!\n");
+            else
+            {
+                system("clear");
+                printf("Gabarito encontrado:\n");
+                Imprime_Gabarito(end_gabarito);       // Função para imprimir o gabarito pelo endereço informado
+            }
+
+            ponteiro_aluno->totalQuestao = ponteiro_gabarito->totalQuestao;
+
+        // Colhe as respostas das questões e verifica se as mesmas são válidas, comparando os dados "char" com seus respectivos
+        // códigos da tabela ASC II ('A' = 65 e 'E' = 69)
+
+        for(i = 0; i < ponteiro_aluno->totalQuestao; i++)
+        {
+            do
+            {
+                printf("\nQuestão %d: ", i+1);
+                scanf("%s", &ponteiro_aluno->resposta[i]);
+
+                if((ponteiro_aluno->resposta[i] < 65 || ponteiro_aluno->resposta[i] > 69) && ponteiro_aluno->resposta[i] != 'X')
+                printf("\nInvalida\n");
+
+            }while((ponteiro_aluno->resposta[i] < 65 || ponteiro_aluno->resposta[i] > 69) && ponteiro_aluno->resposta[i] != 'X');
+
+            printf("Resposta cadastrada.\n");  // Confirma que a resposta foi cadastrada.
+        }
+
+        system("clear");
+
+        // Exibe todas as informações inseridas para fins de revisão
+
+        printf("Revise as informações:\n");
+        Imprime_Aluno(ponteiro_aluno);
+
+        // Dá a opção de salvar ou não o gabarito e verifica se a opção é válida
+
+        do
+        {
+            printf("\nDeseja salvar este gabarito?\n1.Sim 2.Não\n\nSua escolha: ");
+            scanf("%d", &op);
+            if (op < 1 || op > 2)
+            {
+                system("clear");
+                printf("Opção inválida!\n");
+            }
+        }while(op < 1 || op > 2);
+
+        if(op == 1)
+        {
+            Salvar_Aluno();
+            system("clear");
+            printf("Gabarito desta prova foi salvo com sucesso!\n");
+        }
+        else if(op == 2)
+        {
+            system("clear");
+            printf("Este gabarito não foi salvo...\n");
+        }
+
+        // Dá a opção de cadastrar ou não outro gabarito e verifica se a opção é válida
+
+        do
+        {
+            printf("\nDeseja cadastrar outro gabarito?\n1.Sim 2.Não\n\nSua escolha: ");
+            scanf("%d", &op);
+            if (op < 1 || op > 2)
+            {
+                system("clear");
+                printf("Opção inválida!\n");
+            }
+        } while (op < 1 || op > 2);
+
+        if (op == 1)
+        {
+            system("clear");
+            testID = 1;
+        }
+        }while(testID);   // Testa a variável de controle da repetição da função
+
+        system("clear");
+}
+
 
 void Pesquisar_Gabarito()
 {
@@ -267,12 +388,12 @@ void Salvar_Gabarito()
 
     FILE *fp;         // Ponteiro de stream
 
-    fp = fopen("Gabaritos.txt", "a");     // Abre arquivo para anexar informações
+    fp = fopen("gabaritos.txt", "a");     // Abre arquivo para anexar informações
 
     // Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
 
     if(fp == NULL){
-        fprintf(stderr, "\nErro ao abrir o arquivo Gabaritos.txt..\n");
+        fprintf(stderr, "\nErro ao abrir o arquivo gabaritos.txt..\n");
         exit(0);
     }
 
@@ -286,6 +407,34 @@ void Salvar_Gabarito()
     Lista_Gabaritos = Carrega_Gabaritos();   // Carrega na lista os dados dos gabaritos recém atualizados do arquivo
 
 }
+
+void Salvar_Aluno()
+{
+    // Esta função salva de fato o gabarito, anexando seus dados na próxima linha em branco do arquivo de salvamento
+    // Os dados a serem salvos estão temporariamente armazenados na célula apontada pelo ponteiro "ponteiro_gabarito"
+
+    FILE *fp;         // Ponteiro de stream
+
+    fp = fopen("alunos.txt", "a");     // Abre arquivo para anexar informações
+
+    // Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
+
+    if(fp == NULL){
+        fprintf(stderr, "\nErro ao abrir o arquivo alunos.txt..\n");
+        exit(0);
+    }
+
+    // Imprime no arquivo os dados separados por espaços
+
+    fprintf(fp,"%s %d %d %d %s\n", ponteiro_aluno->nome, ponteiro_aluno->matricula, ponteiro_aluno->codGabarito, ponteiro_aluno->totalQuestao, ponteiro_aluno->resposta);
+    SIZE_ALU++;         // Incrementa constante que armazena a quantidade de gabaritos salvos
+    Update_Size();      // Salva os dados da constante SIZE_GAB no arquivo size_gabaritos
+    fclose(fp);         // Fecha a stream com o arquivo de gabaritos
+    Limpar_Memoria_Alu(Lista_Alunos);     // Limpa a lista que contém os dados dos gabaritos (desatualizada)
+    Lista_Alunos = Carrega_Alunos();   // Carrega na lista os dados dos gabaritos recém atualizados do arquivo
+
+}
+
 
 
 
@@ -305,12 +454,12 @@ gabarito *Carrega_Gabaritos()
 
 
 
-    fp = fopen("Gabaritos.txt","a+");   // Abre arquivo para leitura e anexar informações. Caso o arquivo ainda não exista, será criado
+    fp = fopen("gabaritos.txt","a+");   // Abre arquivo para leitura e anexar informações. Caso o arquivo ainda não exista, será criado
 
     // Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
 
 	if(fp == NULL){
-        fprintf(stderr, "\nErro ao abrir o arquivo Gabaritos.txt.\n");
+        fprintf(stderr, "\nErro ao abrir o arquivo gabaritos.txt.\n");
         exit(0);
     }
 
@@ -324,6 +473,43 @@ gabarito *Carrega_Gabaritos()
 
     fclose(fp);       // Fecha a stream com o arquivo de gabaritos
 	return (gabarito *)inicio;          // Retorna um ponteiro para o início da lista criada na função
+}
+
+aluno *Carrega_Alunos()
+{
+    // Esta função cria uma lista sem cabeça, lê os dados de gabaritos do arquivo em que estão salvos,
+    // armazena esses dados na lista e retorna um ponteiro para o início dessa lista
+
+    FILE *fp;   // Ponteiro de stream
+    int i;
+	aluno *inicio, *celula;
+
+	// "*inicio" é o ponteiro que armazena o começo da lista e *celula o endereço da celula atual, onde serão gravadas as informações
+
+    celula = (aluno *) malloc(sizeof(aluno));     // Aloca espaço para uma celula de dados da struct gabarito
+    inicio = celula;      // Define a celula atual como a primeira
+
+
+
+    fp = fopen("alunos.txt","a+");   // Abre arquivo para leitura e anexar informações. Caso o arquivo ainda não exista, será criado
+
+    // Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
+
+	if(fp == NULL){
+        fprintf(stderr, "\nErro ao abrir o arquivo alunos.txt.\n");
+        exit(0);
+    }
+
+    // Copia para a lista os tres dados (inteiro, inteiro e string de chars) de cada linha do arquivo, desconsiderando o '/n'
+
+    for(i = 0; i < SIZE_ALU; i++, celula = celula->prox){
+		fscanf(fp,"%[^\n]s %d %d %[^\n]s", celula->nome, &celula->matricula, &celula->codGabarito, celula->resposta);
+		celula->prox = (aluno *) malloc(sizeof(aluno));   // Aloca espaço para a próxima célula da lista
+		celula->prox->prox = NULL;    // Define o endereço da proxima celula da célula recém alocada como NULL, identificando-a como última da lista
+	}
+
+    fclose(fp);       // Fecha a stream com o arquivo de gabaritos
+	return (aluno *)inicio;          // Retorna um ponteiro para o início da lista criada na função
 }
 
 
@@ -346,6 +532,25 @@ void Imprime_Gabarito(gabarito *end_gabarito)
     printf("\n");
 }
 
+void Imprime_Aluno(aluno *end_aluno)
+{
+    // Esta função imprime os dados de um determinado gabarito, passando por parâmetro seu endereço
+
+    int i;
+
+    // Imprime os dados
+
+    printf("\n\tNome: %s", end_aluno->nome);
+    printf("\n\tMatrícula: %d", end_aluno->matricula);
+    printf("\n\tCódigo da prova: %d", end_aluno->codGabarito);
+    printf("\n\tTotal de questões: %d\n", end_aluno->totalQuestao);
+    printf("\n\tRespostas:\n");
+    for (i = 0; i < end_aluno->totalQuestao; i++)
+    {
+        printf("\n\tQuestão %d: %c", i+1, end_aluno->resposta[i]);
+    }
+    printf("\n");
+}
 
 
 void Imprime_Todos_Gabaritos()
@@ -371,122 +576,12 @@ void Imprime_Todos_Gabaritos()
     }
 }
 
-void Cadastrar_Aluno()
-{
-    // Esta função recolhe os dados de uma prova (chave, numero de questões, gabarito) e dá a opção de salvá-los ou não
-    // Os dados temporários (para serem salvos ou não) são armazenados em uma célula criada para este fim no início do programa
-    // Esta célula é do tipo gabarito e é referenciada pelo ponteiro "ponteiro_gabarito"
-
-   int i, op, testID;
-
-    do
-    {
-        testID = 0;    // Variável para controlar a repetição da função
-        printf("\n\tChave de acesso da prova (de 1111 a 9999): ");
-        scanf("%d", &ponteiro_gabarito->codGabarito);
-        system("clear");
-
-        // Verifica se a informação digitada é válida. Permite apenas números de 4 dígitos que não comecem com zeros
-
-        while (ponteiro_gabarito->codGabarito < 1111 || ponteiro_gabarito->codGabarito > 9999)
-        {
-            printf("\n\tChave de acesso deve estar entre 1111 e 9999.\n\tPor favor digite novamente: ");
-            scanf("%d", &ponteiro_gabarito->codGabarito);
-            system("clear");
-        }
-
-        printf("\n\tTotal de questões da prova (Entre %d e %d): ", RESPOSTAS_MIN, RESPOSTAS_MAX);
-        scanf("%d", &ponteiro_gabarito->totalQuestao);
-        system("clear");
-
-        // Verifica se a informação digitada é válida
-
-        while(ponteiro_gabarito->totalQuestao < RESPOSTAS_MIN || ponteiro_gabarito->totalQuestao > RESPOSTAS_MAX)
-        {
-            printf("\n\tTotal de questões da prova deve estar entre %d e %d.\n\tPor favor digite novamente: ", RESPOSTAS_MIN, RESPOSTAS_MAX);
-            scanf("%d", &ponteiro_gabarito->totalQuestao);
-            system("clear");
-        }
-
-        // Colhe as respostas das questões e verifica se as mesmas são válidas, comparando os dados "char" com seus respectivos
-        // códigos da tabela ASC II ('A' = 65 e 'E' = 69)
-
-        for(i = 0; i < ponteiro_gabarito->totalQuestao; i++)
-        {
-            do
-            {
-                printf("\nQuestão %d: ", i+1);
-                scanf("%s", &ponteiro_gabarito->resposta[i]);
-
-                if((ponteiro_gabarito->resposta[i] < 65 || ponteiro_gabarito->resposta[i] > 69) && ponteiro_gabarito->resposta[i] != 'X')
-                printf("\nInvalida\n");
-
-            }while((ponteiro_gabarito->resposta[i] < 65 || ponteiro_gabarito->resposta[i] > 69) && ponteiro_gabarito->resposta[i] != 'X');
-
-            printf("Resposta cadastrada.\n");  // Confirma que a resposta foi cadastrada.
-        }
-
-        system("clear");
-
-        // Exibe todas as informações inseridas para fins de revisão
-
-        printf("Revise as informações:\n");
-        Imprime_Gabarito(ponteiro_gabarito);
-
-        // Dá a opção de salvar ou não o gabarito e verifica se a opção é válida
-
-        do
-        {
-            printf("\nDeseja salvar este gabarito?\n1.Sim 2.Não\n\nSua escolha: ");
-            scanf("%d", &op);
-            if (op < 1 || op > 2)
-            {
-                system("clear");
-                printf("Opção inválida!\n");
-            }
-        }while(op < 1 || op > 2);
-
-        if(op == 1)
-        {
-            Salvar_Gabarito();
-            system("clear");
-            printf("Gabarito salvo com sucesso!\n");
-        }
-        else if(op == 2)
-        {
-            system("clear");
-            printf("Este gabarito não foi salvo...\n");
-        }
-
-        // Dá a opção de cadastrar ou não outro gabarito e verifica se a opção é válida
-
-        do
-        {
-            printf("\nDeseja cadastrar outro gabarito?\n1.Sim 2.Não\n\nSua escolha: ");
-            scanf("%d", &op);
-            if (op < 1 || op > 2)
-            {
-                system("clear");
-                printf("Opção inválida!\n");
-            }
-        } while (op < 1 || op > 2);
-
-        if (op == 1)
-        {
-            system("clear");
-            testID = 1;
-        }
-        }while(testID);   // Testa a variável de controle da repetição da função
-
-        system("clear");
-}
-
 
 void Size()
 {
     // Esta função atualiza o valor as constantes SIZE_GAB e SIZE_ALU com o valor armazenado nos
     // arquivos size_gabaritos e size_alunos, que, por sua vez, informam o número de linhas de
-    // gabaritos e alunos cadastrados nos arquivos "Gabaritos.txt" e "Alunos.txt"
+    // gabaritos e alunos cadastrados nos arquivos "gabaritos.txt" e "Alunos.txt"
 
 	FILE *arquivo;      // Ponteiro de stream
 	arquivo = fopen("size_gabaritos.txt", "a+");  // Abre arquivo para leitura. Cria o arquivo caso não exista

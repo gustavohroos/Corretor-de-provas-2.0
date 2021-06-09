@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include <locale.h>
-#include "func.h"
 #include "func.c"
 
 
@@ -24,6 +23,7 @@ ponteiro_aluno = (aluno *)malloc(SIZE_ALU * sizeof(aluno));
 
 Lista_Gabaritos = Carrega_Gabaritos(); // Carrega na Lista_Gabaritos os dados dos gabaritos salvos em arquivo. Cria o arquivo caso nao exista
 
+Lista_Alunos = Carrega_Alunos();
 // Laço de repetição infinito para exibição do menu
 
 for(;;)
@@ -35,10 +35,10 @@ for(;;)
 
       case 1:
         Cadastrar_Gabarito();
-      break;
+        break;
       case 2:
-
-      break;
+        Cadastrar_Aluno();
+        break;
       case 3:
         system("clear");
         do
