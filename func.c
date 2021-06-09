@@ -504,9 +504,9 @@ void Exclui_Gab()
 			}
 		}
         Update_Size();
-		fp = fopen("gabaritos.txt", "w");
+		fp = fopen("resources/gabaritos.txt", "w");
 		if(fp == NULL){ 
-			fprintf(stderr, "\nErro arquivo gabaritos.txt.\n"); 
+			fprintf(stderr, "\nErro arquivo resources/gabaritos.txt.\n"); 
 			exit(0);
 		}
 		celula = start;
@@ -564,7 +564,7 @@ void Exclui_Aluno()
 			}
 		}
         Update_Size();
-		fp = fopen("alunos.txt", "w");
+		fp = fopen("resources/alunos.txt", "w");
 		if(fp == NULL){ 
 			fprintf(stderr, "\nErro arquivo alunos.txt.\n"); 
 			exit(0);
@@ -614,7 +614,7 @@ void Salvar_Gabarito()
 
     FILE *fp;         // Ponteiro de stream
 
-    fp = fopen("gabaritos.txt", "a");     // Abre arquivo para anexar informações
+    fp = fopen("resources/gabaritos.txt", "a");     // Abre arquivo para anexar informações
 
     // Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
 
@@ -641,7 +641,7 @@ void Salvar_Aluno()
 
     FILE *fp;         // Ponteiro de stream
 
-    fp = fopen("alunos.txt", "a");     // Abre arquivo para anexar informações
+    fp = fopen("resources/alunos.txt", "a");     // Abre arquivo para anexar informações
 
     // Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
 
@@ -680,7 +680,7 @@ gabarito *Carrega_Gabaritos()
 
 
 
-    fp = fopen("gabaritos.txt","a+");   // Abre arquivo para leitura e anexar informações. Caso o arquivo ainda não exista, será criado
+    fp = fopen("resources/gabaritos.txt","a+");   // Abre arquivo para leitura e anexar informações. Caso o arquivo ainda não exista, será criado
 
     // Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
 
@@ -717,7 +717,7 @@ aluno *Carrega_Alunos()
 
 
 
-    fp = fopen("alunos.txt","a+");   // Abre arquivo para leitura e anexar informações. Caso o arquivo ainda não exista, será criado
+    fp = fopen("resources/alunos.txt","a+");   // Abre arquivo para leitura e anexar informações. Caso o arquivo ainda não exista, será criado
 
     // Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
 
@@ -729,7 +729,7 @@ aluno *Carrega_Alunos()
     // Copia para a lista os tres dados (inteiro, inteiro e string de chars) de cada linha do arquivo, desconsiderando o '/n'
 
     for(i = 0; i < SIZE_ALU; i++, celula = celula->prox){
-		fscanf(fp,"%[^\n]s %d %d %[^\n]s", celula->nome, &celula->matricula, &celula->codGabarito, celula->resposta);
+		fscanf(fp,"%[^\n]%*c %d %d %[^\n]s", celula->nome, &celula->matricula, &celula->codGabarito, celula->resposta);
 		celula->prox = (aluno *) malloc(sizeof(aluno));   // Aloca espaço para a próxima célula da lista
 		celula->prox->prox = NULL;    // Define o endereço da proxima celula da célula recém alocada como NULL, identificando-a como última da lista
 	}
@@ -810,7 +810,7 @@ void Size()
     // gabaritos e alunos cadastrados nos arquivos "gabaritos.txt" e "Alunos.txt"
 
 	FILE *arquivo;      // Ponteiro de stream
-	arquivo = fopen("size_gabaritos.txt", "a+");  // Abre arquivo para leitura. Cria o arquivo caso não exista
+	arquivo = fopen("resources/size_gabaritos.txt", "a+");  // Abre arquivo para leitura. Cria o arquivo caso não exista
 
 	// Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
 
@@ -822,7 +822,7 @@ void Size()
 	fscanf(arquivo, "%d", &SIZE_GAB);   // Atualiza a constante com o valor do arquivo
 	fclose(arquivo);     // Fecha a stream com o arquivo size_gabaritos.txt
 
-	arquivo = fopen("size_alunos.txt", "a+");
+	arquivo = fopen("resources/size_alunos.txt", "a+");
 
 	// Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
 
@@ -831,7 +831,7 @@ void Size()
         exit(0);
     }
 	fscanf(arquivo, "%d", &SIZE_ALU);     // Atualiza a constante com o valor do arquivo
-	fclose(arquivo);    // Fecha a stream com o arquivo size_alunos.txt
+	fclose(arquivo);    // Fecha a stream com o arquivo resources/size_alunos.txt
 }
 
 
@@ -842,7 +842,7 @@ void Update_Size()
     // com os valores das constantes SIZE_GAB e SIZE_ALU respectivamente
 
 	FILE *arquivo;     // Ponteiro de stream
-	arquivo = fopen("size_gabaritos.txt", "w");   // Abre arquivo para escrita, substituindo o existente de mesmo nome
+	arquivo = fopen("resources/size_gabaritos.txt", "w");   // Abre arquivo para escrita, substituindo o existente de mesmo nome
 
 	// Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
 
@@ -853,7 +853,7 @@ void Update_Size()
 	fprintf(arquivo,"%d", SIZE_GAB);   // Imprime no arquivo o valor da constante
 	fclose(arquivo);    //Fecha a stream com o arquivo size_gabaritos.txt
 
-	arquivo = fopen("size_alunos.txt", "w");    // Abre arquivo para escrita, substituindo o existente de mesmo nome
+	arquivo = fopen("resources/size_alunos.txt", "w");    // Abre arquivo para escrita, substituindo o existente de mesmo nome
 
 	// Verifica e avisa se houve algum erro ao abrir a stream "fp" com o arquivo
 
