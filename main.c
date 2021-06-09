@@ -32,93 +32,27 @@ for(;;)
 
     switch (op)
     {
-
-      case 1:
+    case 1:
         Cadastrar_Gabarito();
         break;
-      case 2:
+    case 2:
         Cadastrar_Aluno();
         break;
-      case 3:
-        system("clear");
-        do
-        {
-            printf("\n\n ------Mostrar Gabarito-------\n");
-            printf("| 1.Pesquisar                 |\n");
-            printf(" -----------------------------\n");
-            printf("| 2.Mostrar todos             |\n");
-            printf(" -----------------------------\n");
-            printf("| 0.Voltar                    |\n");
-            printf(" -----------------------------\n\nSua escolha: ");
-            scanf("%d", &op);
-
-            switch (op)
-            {
-            case 1:
-                Pesquisar_Gabarito();
-                system("clear");
-                break;
-            case 2:
-                system("clear");
-                Imprime_Todos_Gabaritos();
-                printf("\n\nPressione qualquer tecla para continuar...");
-                getchar();
-                getchar();
-                system("clear");
-                break;
-            case 0:
-                system("clear");
-                break;
-            default:
-                system("clear");
-                printf("Opção inválida!");
-                break;
-            }
-            }while(op < 0 || op > 2);
-            break;
-      case 4:
-
-      break;
-      case 5:
-
-        system("clear");
-        do
-        {
-            printf("\n\n ----------Excluir------------\n");
-            printf("| 1.Gabarito                  |\n");
-            printf(" -----------------------------\n");
-            printf("| 2.Aluno                     |\n");
-            printf(" -----------------------------\n");
-            printf("| 0.Voltar                    |\n");
-            printf(" -----------------------------\n\nSua escolha: ");
-            scanf("%d", &op);
-
-            switch (op)
-            {
-            case 1:
-                // função para excluir gabarito
-                system("clear");
-                break;
-            case 2:
-                // função para excluir aluno
-                system("clear");
-                break;
-            case 0:
-                system("clear");
-                break;
-            default:
-                system("clear");
-                printf("Opção inválida!");
-                break;
-            }
-            }while(op < 0 || op > 2);
-            break;
-        case 6:
+    case 3:
+        Mostrar_Gabarito();
+        break;
+    case 4:
 
         break;
-        case 0:
-            exit(0);
+    case 5:
+        Excluir();
         break;
+    case 6:
+
+        break;
+    case 0:
+        exit(0);
+    break;
     }
 }
 

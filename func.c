@@ -20,7 +20,7 @@ int menu(void)
 	printf(" -----------------------------------------\n");
     printf("| 4.Pesquisar Aluno                       |\n");
 	printf(" -----------------------------------------\n");
-	printf("| 5.Excluir...                            |\n");
+	printf("| 5.Excluir                               |\n");
 	printf(" -----------------------------------------\n");
     printf("| 6.Mostrar Ranking                       |\n");
 	printf(" -----------------------------------------\n");
@@ -179,7 +179,7 @@ void Cadastrar_Aluno()
     // Esta célula é do tipo gabarito e é referenciada pelo ponteiro "ponteiro_gabarito"
 
    int i, op, testID, chave_gabarito, total_quest;
-   gabarito *end_gabarito;
+   gabarito *end_gabarito, *celula;
    aluno *end_aluno;
 
 
@@ -215,14 +215,22 @@ void Cadastrar_Aluno()
         ponteiro_aluno->totalQuestao = Busca_TotalQuest(chave_gabarito);
 
             while (ponteiro_aluno->totalQuestao == -1){
-                printf("Chave de gabarito não cadastrada!\nTente novamente: "); scanf("%d", &ponteiro_aluno->codGabarito);
+                printf("\n\tChave de gabarito não cadastrada!\n\tGabaritos cadastrados:\n");
+                for (celula = Lista_Gabaritos, i = 0; celula->prox != NULL; celula = celula->prox, i++){
+                    printf("\n -------------------------------------\n");
+                    printf("\n\tGabarito %d:\n", i+1);
+                    printf("\n\tCódigo da prova: %d", celula->codGabarito);
+                    printf("\n\tNúmero de questões: %d\n", celula->totalQuestao);
+                    printf("\n");
+                }
+                printf("\n\tTente novamente: "); scanf("%d", &ponteiro_aluno->codGabarito);
                 chave_gabarito = ponteiro_aluno->codGabarito;
                 ponteiro_aluno->totalQuestao = Busca_TotalQuest(chave_gabarito);
             }
-            
+
         system("clear");
-        printf("Gabarito encontrado, chave %d\n", chave_gabarito);
-        printf("A prova possui %d questões, preencha abaixo em ordem:\n", ponteiro_aluno->totalQuestao);
+        printf("\n\tGabarito encontrado, chave %d\n", chave_gabarito);
+        printf("\n\tA prova possui %d questões, preencha-as abaixo em ordem:\n", ponteiro_aluno->totalQuestao);
 
         // Colhe as respostas das questões e verifica se as mesmas são válidas, comparando os dados "char" com seus respectivos
         // códigos da tabela ASC II ('A' = 65 e 'E' = 69)
@@ -297,6 +305,81 @@ void Cadastrar_Aluno()
         system("clear");
 }
 
+void Mostrar_Gabarito()
+{
+    int op;
+    system("clear");
+        do
+        {
+            printf("\n\n ------Mostrar Gabarito-------\n");
+            printf("| 1.Pesquisar                 |\n");
+            printf(" -----------------------------\n");
+            printf("| 2.Mostrar todos             |\n");
+            printf(" -----------------------------\n");
+            printf("| 0.Voltar                    |\n");
+            printf(" -----------------------------\n\nSua escolha: ");
+            scanf("%d", &op);
+
+            switch (op)
+            {
+            case 1:
+                Pesquisar_Gabarito();
+                system("clear");
+                break;
+            case 2:
+                system("clear");
+                Imprime_Todos_Gabaritos();
+                printf("\n\nPressione qualquer tecla para continuar...");
+                getchar();
+                getchar();
+                system("clear");
+                break;
+            case 0:
+                system("clear");
+                break;
+            default:
+                system("clear");
+                printf("Opção inválida!");
+                break;
+            }
+            }while(op < 0 || op > 2);
+}
+
+void Excluir()
+{
+    int op;
+    system("clear");
+        do
+        {
+            printf("\n\n ----------Excluir------------\n");
+            printf("| 1.Gabarito                  |\n");
+            printf(" -----------------------------\n");
+            printf("| 2.Aluno                     |\n");
+            printf(" -----------------------------\n");
+            printf("| 0.Voltar                    |\n");
+            printf(" -----------------------------\n\nSua escolha: ");
+            scanf("%d", &op);
+
+            switch (op)
+            {
+            case 1:
+                Exclui_Gab();
+                system("clear");
+                break;
+            case 2:
+                Exclui_Aluno();
+                system("clear");
+                break;
+            case 0:
+                system("clear");
+                break;
+            default:
+                system("clear");
+                printf("Opção inválida!");
+                break;
+            }
+            }while(op < 0 || op > 2);
+}
 
 void Pesquisar_Gabarito()
 {
@@ -313,7 +396,7 @@ void Pesquisar_Gabarito()
 
         // Lê o codigo do gabarito a ser pesquisado e armazena na célula para dados temporários
 
-        printf("Informe uma chave de gabarito válida(de 1111 a 9999): ");
+        printf("\n\tInforme uma chave de gabarito válida(de 1111 a 9999): ");
         scanf("%d", &ponteiro_gabarito->codGabarito);
         system("clear");
 
@@ -321,7 +404,7 @@ void Pesquisar_Gabarito()
 
         while (ponteiro_gabarito->codGabarito < 1111 || ponteiro_gabarito->codGabarito > 9999)
         {
-            printf("Chave de gabarito inválida! Tente novamente: ");
+            printf("\n\tChave de gabarito inválida! Tente novamente: ");
             scanf("%d", &ponteiro_gabarito->codGabarito);
             system("clear");
         }
@@ -333,11 +416,11 @@ void Pesquisar_Gabarito()
         // Se o gabarito existir, exibe os dados do mesmo. Senão, informa que não existe
 
         if (end_gabarito == NULL)
-            printf("Chave de gabarito não cadastrada!\n");
+            printf("\n\tChave de gabarito não cadastrada!\n");
         else
         {
             system("clear");
-            printf("Gabarito encontrado:\n");
+            printf("\n\tGabarito encontrado:\n");
             Imprime_Gabarito(end_gabarito);       // Função para imprimir o gabarito pelo endereço informado
         }
 
@@ -345,12 +428,12 @@ void Pesquisar_Gabarito()
 
         do
         {
-            printf("\nDeseja procurar outro gabarito?\n1.Sim 2.Não\n\nSua escolha: ");
+            printf("\n\tDeseja procurar outro gabarito?\n1.Sim 2.Não\n\nSua escolha: ");
             scanf("%d", &op);
             if (op < 1 || op > 2)
             {
                 system("clear");
-                printf("Opção inválida!\n");
+                printf("\n\tOpção inválida!\n");
             }
         } while (op < 1 || op > 2);
 
@@ -381,6 +464,126 @@ gabarito *Busca_Gab(int codigo)
         }
     }
     return NULL;
+}
+
+void Exclui_Gab()
+{
+    // Esta função percorre a lista de gabaritos procurando pelo código passado por parâmetro. Se encontra, retorna o endereço deste gabarito. Senão, retorna NULL
+
+    int i, codigo, auxiliar = 0, testId = 0;
+    gabarito *temp, *start, *celula;   // Declara um ponteiro para armazenar endereços temporários do tipo gabarito e associa ao endereço inicial da celulaa de gabaritos
+    FILE *fp;
+    system("clear");
+    printf("\n\n -------Excluir Gabarito------\n");
+    printf("\nDigite o código de acesso do gabarito a ser removido: "); scanf("%d", &codigo);
+    celula = Lista_Gabaritos;
+    start = celula;
+
+    for(i = 0, celula = start; i < SIZE_GAB; i++, celula = celula->prox){
+        if(celula->codGabarito == codigo){
+            testId = 0;
+        }
+    }
+	if(testId){
+	    printf("\n\tCódigo inválido");
+    }else{
+		celula = start;
+
+		for(i = 0; i < SIZE_GAB; i++, celula = celula->prox){
+			if(celula->codGabarito==codigo){
+				auxiliar = 1;
+				if(i == 0){
+					start = celula->prox;
+				}else{
+					temp->prox = celula->prox;
+				}
+				free(celula);
+				i = SIZE_GAB--;
+			}else{
+				temp = celula;
+			}
+		}
+        Update_Size();
+		fp = fopen("gabaritos.txt", "w");
+		if(fp == NULL){ 
+			fprintf(stderr, "\nErro arquivo gabaritos.txt.\n"); 
+			exit(0);
+		}
+		celula = start;
+		for(i = 0; i < SIZE_GAB; i++, celula = celula->prox){
+			fprintf(fp , "%d %d %s\n", celula->codGabarito, celula->totalQuestao, celula->resposta);
+		}
+		if(auxiliar)
+			printf("\nGabarito foi removido com sucesso.\n");
+		fclose(fp);
+		// Limpar_Memoria_Gab(Lista_Gabaritos);     // Limpa a lista que contém os dados dos gabaritos (desatualizada)
+        Limpar_Memoria_Gab(celula);
+        Lista_Gabaritos = Carrega_Gabaritos();
+        printf("\n\nPressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+}
+
+}
+
+void Exclui_Aluno()
+{
+    // Esta função percorre a lista de gabaritos procurando pelo código passado por parâmetro. Se encontra, retorna o endereço deste gabarito. Senão, retorna NULL
+
+    int i, matricula, auxiliar = 0, testId = 0;
+    aluno *temp, *start, *celula;   // Declara um ponteiro para armazenar endereços temporários do tipo gabarito e associa ao endereço inicial da celulaa de gabaritos
+    FILE *fp;
+    system("clear");
+    printf("\n\n -------Excluir Aluno------\n");
+    printf("\nDigite a matrícula do aluno a ser removido: "); scanf("%d", &matricula);
+    celula = Lista_Alunos;
+    start = celula;
+
+    for(i = 0, celula = start; i < SIZE_ALU; i++, celula = celula->prox){
+        if(celula->matricula == matricula){
+            testId = 0;
+        }
+    }
+	if(testId){
+	    printf("\n\tMatrícula inválida");
+    }else{
+		celula = start;
+
+		for(i = 0; i < SIZE_ALU; i++, celula = celula->prox){
+			if(celula->matricula==matricula){
+				auxiliar = 1;
+				if(i == 0){
+					start = celula->prox;
+				}else{
+					temp->prox = celula->prox;
+				}
+				free(celula);
+				i = SIZE_ALU--;
+			}else{
+				temp = celula;
+			}
+		}
+        Update_Size();
+		fp = fopen("alunos.txt", "w");
+		if(fp == NULL){ 
+			fprintf(stderr, "\nErro arquivo alunos.txt.\n"); 
+			exit(0);
+		}
+		celula = start;
+		for(i = 0; i < SIZE_GAB; i++, celula = celula->prox){
+			fprintf(fp , "%s %d %d %d %s\n", celula->nome, celula->matricula, celula->codGabarito, celula->totalQuestao, celula->resposta);
+		}
+		if(auxiliar)
+			printf("\nAluno foi removido com sucesso.\n");
+		fclose(fp);
+		// Limpar_Memoria_Gab(Lista_Gabaritos);     // Limpa a lista que contém os dados dos gabaritos (desatualizada)
+        Limpar_Memoria_Alu(celula);
+        Lista_Alunos = Carrega_Alunos();
+        printf("\n\nPressione qualquer tecla para continuar...");
+        getchar();
+        getchar();
+    }
+
 }
 
 int Busca_TotalQuest(int codigo)
