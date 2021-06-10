@@ -1,4 +1,4 @@
-#define NOME_MAX 50
+#define NOME_MAX 100
 #define RESPOSTAS_MAX 50
 #define RESPOSTAS_MIN 1
 

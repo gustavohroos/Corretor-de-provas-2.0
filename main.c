@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<locale.h>
+#include<string.h>
+#include"func.h"
 #include"func.c"
 
 
@@ -25,6 +27,9 @@ Lista_Gabaritos = Carrega_Gabaritos(); // Carrega na Lista_Gabaritos os dados do
 
 Lista_Alunos = Carrega_Alunos();
 // Laço de repetição infinito para exibição do menu
+
+printf("%s", Lista_Alunos->nome);
+printf("%d", Lista_Alunos->codGabarito);
 
 for(;;)
 {
