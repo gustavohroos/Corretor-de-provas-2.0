@@ -1,49 +1,5 @@
 #include"func.h"
 
-#define NOME_MAX 100
-#define RESPOSTAS_MAX 50
-#define RESPOSTAS_MIN 1
-
-// DECLARAÇÃO STRUCTS
-
-
-struct prova {
-  int codGabarito, totalQuestao;
-  char resposta[RESPOSTAS_MAX];
-  struct prova *prox;
-};
-
-typedef struct prova gabarito;
-
-struct alu {
-  int matricula, codGabarito, totalQuestao;
-  char nome[NOME_MAX], resposta[RESPOSTAS_MAX];
-  struct alu *prox;
-};
-
-typedef struct alu aluno;
-
-// Declaração do ponteiro universal que apontará o endereço da célula responsável por armazenar dados do tipo gabarito de forma temporária
-gabarito *ponteiro_gabarito;
-
-// Declaração do ponteiro universal que apontará o endereço da célula responsável por armazenar dados do tipo aluno de forma temporária
-aluno *ponteiro_aluno;
-
-
-// VARIÁVEIS GLOBAIS
-
-
-int SIZE_GAB, SIZE_ALU;   // Armazenam o número de linhas de gabaritos e alunos cadastrados nos arquivos "Gabaritos.txt" e "Alunos.txt"
-
-// Declaração do ponteiro universal que apontará para o início da lista encadeada que armazenará os dados de todos os gabaritos cadastrados
-gabarito *Lista_Gabaritos;
-
-// Declaração do ponteiro universal que apontará para o início da lista encadeada que armazenará os dados de todos os alunos cadastrados
-aluno *Lista_Alunos;
-
-
-// DECLARAÇÃO FUNÇÕES
-
 
 int menu(void)
 {
@@ -99,9 +55,6 @@ int menu(void)
 
   return op;
 }
-
-
-
 
 
 void Cadastrar_Gabarito()
@@ -217,7 +170,7 @@ void Cadastrar_Gabarito()
 void Cadastrar_Aluno()
 {
 
-   int i, op, testID, chave_gabarito, total_quest;
+   int i, op, testID, chave_gabarito, total_quest, acertos_total = 0;
    gabarito *end_gabarito, *celula;
    aluno *end_aluno;
 
@@ -305,6 +258,10 @@ void Cadastrar_Aluno()
             Salvar_Aluno();
             system("clear");
             printf("O seu gabarito desta prova foi salvo com sucesso!\n");
+            printf("%d", acertos_total);
+            acertos_total = CompararRespostas(ponteiro_aluno);
+            printf("%d", acertos_total);
+            printf("Parabéns, você acertou %d/%d questões nessa prova", acertos_total, total_quest);
         }
         else if(op == 2)
         {
@@ -809,6 +766,41 @@ void Imprime_Todos_Gabaritos()
     }
 }
 
+int CompararRespostas(aluno *celula_aluno){
+    
+    int i, testId = 1, acertos = 0;
+    char respostas[RESPOSTAS_MAX];
+    FILE *fp;
+    gabarito *celula = Lista_Gabaritos;
+    strcpy(respostas, celula_aluno->resposta);
+
+    fopen("resources/gabaritos.txt", "r");
+    if(fp == NULL){ 
+			fprintf(stderr, "\nErro arquivo gabaritos.txt.\n"); 
+			exit(0);
+	}
+
+    for(i = 0 ; i < SIZE_GAB; i++, celula = celula->prox){
+        if(celula->codGabarito == celula_aluno->codGabarito){
+            testId = 0;
+        }
+    }
+	  if(testId){
+	    printf("\n\tCódigo inválido");
+        }else{
+            for(i = 0; i < SIZE_GAB; i++, celula = celula->prox){
+                if(celula->codGabarito == celula_aluno->codGabarito){
+                    for(i=0; i<celula_aluno->totalQuestao; i++){
+                        if (celula->resposta[i] == celula_aluno->resposta[i])
+                        {
+                            acertos++;
+                        }
+                    }
+                }
+            }
+        }
+    return acertos;
+}
 
 void Size()
 {

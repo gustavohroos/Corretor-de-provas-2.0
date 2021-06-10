@@ -1,11 +1,13 @@
+/*
+//Sistema de correção de gabaritos.
+//Autores: Allan Schuh, Gustavo Roos, Gustavo Souza e João Victor.
+*/
+
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include<locale.h>
-#include"func.h"
 #include"func.c"
-
-
-
 
 int main()
 {
@@ -14,21 +16,14 @@ setlocale(LC_ALL, "");   // Função para reparar erros de codificação de cara
 
 int op;
 
-Size();   // atualiza o valor as constantes SIZE_GAB e SIZE_ALU com o valor armazenado nos arquivos size_gabaritos e size_alunos
-
+// atualiza o valor as constantes SIZE_GAB e SIZE_ALU com o valor armazenado nos arquivos size_gabaritos e size_alunos
+Size();
 // Aloca espaço na memória para a célula responsável por armazenar dados do tipo gabarito de forma temporária
 ponteiro_gabarito = (gabarito *)malloc(SIZE_GAB * sizeof(gabarito));
-
-// Aloca espaço na memória para a célula responsável por armazenar dados do tipo aluno de forma temporária
 ponteiro_aluno = (aluno *)malloc(SIZE_ALU * sizeof(aluno));
-
-Lista_Gabaritos = Carrega_Gabaritos(); // Carrega na Lista_Gabaritos os dados dos gabaritos salvos em arquivo. Cria o arquivo caso nao exista
-
+// Carrega na Lista_Gabaritos os dados dos gabaritos salvos em arquivo. Cria o arquivo caso nao exista
+Lista_Gabaritos = Carrega_Gabaritos();
 Lista_Alunos = Carrega_Alunos();
-// Laço de repetição infinito para exibição do menu
-
-printf("%s", Lista_Alunos->nome);
-printf("%d", Lista_Alunos->codGabarito);
 
 for(;;)
 {
@@ -52,7 +47,7 @@ for(;;)
         Excluir();
         break;
     case 6:
-
+        
         break;
     case 0:
         exit(0);
