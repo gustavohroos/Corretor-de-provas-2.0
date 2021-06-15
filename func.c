@@ -34,7 +34,17 @@ int menu(void)
 		int dec = 0;
 		printf("\n------------------\n");
 		printf("\nDeseja mesmo sair?\n1 - Sim 2 - Não: ");
+    do
+    {
 		scanf("%d", &dec);
+    if(dec < 1 || dec > 2)
+    {
+	  	system("clear");
+		printf("\nOpção inválida!\n");
+		printf("\n------------------\n");
+		printf("\nDeseja mesmo sair?\n1 - Sim 2 - Não: ");
+    }
+    }while(dec < 1 || dec > 2);
 		if(dec == 2)
 			op = 5;
 		system("clear");
@@ -49,6 +59,8 @@ int menu(void)
 
 	return op;
 }
+
+
 
 aluno *Busca_Alu(int matricula, aluno *inicio_da_pesquisa)
 {
@@ -78,7 +90,7 @@ aluno *Carrega_Alunos()
 	if(fp == NULL){
         fprintf(stderr, "\nErro ao abrir o arquivo alunos.txt.\n");
         exit(0);
-  }
+  	}
 
     for(i = 0; i < SIZE_ALU; i++, celula = celula->prox){
 
